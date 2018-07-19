@@ -15,14 +15,17 @@ class MarketGroupView(View):
 
             }
             children = MarketGroup.objects.filter(parent__isnull=True)
+            types = []
         else:
             marketgroup = MarketGroup.objects.get(id=marketgroup_id)
             children = marketgroup.children
+            types = marketgroup.types
 
         context = {
             "node": marketgroup,
+            "breadcrumbs": self._generate_breadcrumb_trail(marketgroup),
             "children": children,
-            "breadcrumbs": self._generate_breadcrumb_trail(marketgroup)
+            "types": types
         }
         return render(request, "core/marketgroup.html", context)
 

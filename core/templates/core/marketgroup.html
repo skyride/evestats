@@ -25,6 +25,7 @@
         {% endfor %}
     </ol>
 
+
     {% with sisters=node.parent.children.all %}
         {% if sisters.count > 1 and breadcrumbs|length > 2 %}
             <ol id="sister-groups" class="breadcrumb">
@@ -40,22 +41,52 @@
     {% endwith %}
 
 
-    <div class="row">
-        {% for child in children.all %}
-        <div class="col-4">
-            <div class="card bg-light mb-3">
-                <a href="{% url 'market_group_view' child.id %}">
-                    <div class="card-header">
-                        <strong>{{ child.name }}</strong>
-                    </div>
-                </a>
-                {% if child.description %}
-                    <div class="card-body">
-                        {{ child.description }}
-                    </div>
-                {% endif %}
+    {% if children.count > 0 %}
+        <div class="row">
+            {% for child in children.all %}
+            <div class="col-4">
+                <div class="card bg-light mb-3">
+                    <a href="{% url 'market_group_view' child.id %}">
+                        <div class="card-header">
+                            <strong>{{ child.name }}</strong>
+                        </div>
+                    </a>
+                    {% if child.description %}
+                        <div class="card-body">
+                            {{ child.description }}
+                        </div>
+                    {% endif %}
+                </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
+    {% endif %}
+
+    {% if types.count > 0 %}
+        <div class="row">
+            {% for type in types.all %}
+                <div class="col-12">
+                    <div class="card bg-light mb-0">
+                        {% if type.description %}
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-1 col-md-2 col-sm-2">
+                                        <a href="{% url 'market_group_view' type.id %}">
+                                            <img src="https://imageserver.eveonline.com/Type/{{ type.id }}_64.png">
+                                        </a>
+                                    </div>
+                                    <div class="col-lg-11 col-md-10 col-sm-10">
+                                        <a href="{% url 'market_group_view' type.id %}"><div>
+                                                <strong>{{ type.name }}</strong>
+                                        </div></a>
+                                        {{ type.description|safe }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}

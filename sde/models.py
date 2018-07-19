@@ -121,7 +121,7 @@ class Type(models.Model):
     volume = models.FloatField(null=True)
     capacity = models.FloatField(null=True)
     published = models.BooleanField()
-    market_group = models.ForeignKey(MarketGroup, null=True, on_delete=models.CASCADE)
+    market_group = models.ForeignKey(MarketGroup, related_name="types", null=True, on_delete=models.CASCADE)
     icon_id = models.IntegerField(null=True)
 
     buy = models.DecimalField(max_digits=16, decimal_places=2, default=0)
