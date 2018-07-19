@@ -21,6 +21,27 @@ class MarketGroupView(View):
 
         context = {
             "node": marketgroup,
-            "children": children
+            "children": children,
+            "breadcrumbs": self._generate_breadcrumb_trail(marketgroup)
         }
         return render(request, "core/marketgroup.html", context)
+
+
+    def _generate_breadcrumb_trail(self, marketgroup):
+        if isinstance(marketgroup, dict):
+            return None
+
+        def recurse(node):
+            """Return an list containing the path to this trail"""
+            if node.parent is None:
+                return [node]
+            else:
+                return [*recurse(node.parent), node]
+
+        return [
+            {
+                "name": "Market",
+                "root": True
+            },
+            *recurse(marketgroup)
+        ]
