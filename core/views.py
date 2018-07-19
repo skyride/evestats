@@ -19,7 +19,7 @@ class MarketGroupView(View):
         else:
             marketgroup = MarketGroup.objects.get(id=marketgroup_id)
             children = marketgroup.children
-            types = marketgroup.types
+            types = marketgroup.types.order_by('name')
 
         context = {
             "node": marketgroup,
