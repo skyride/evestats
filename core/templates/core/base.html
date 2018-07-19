@@ -1,0 +1,17 @@
+{% load static %}
+
+<html>
+    <head>
+        <link href="{% static 'core/css/pulse.min.css' %}" rel="stylesheet" >
+    </head>
+
+    <body>
+        <main role="main">
+            <div class="container">
+                <br />
+                {% block body %}
+                {% endblock %}
+            </div>
+        </main>
+    </body>
+</html>

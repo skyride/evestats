@@ -1,0 +1,33 @@
+{% extends "core/base.html" %}
+
+{% block body %}
+    <div class="jumbotron">
+        <h1 class="display-3">{{ node.name }}</h1>
+        <p class="lead">
+            {{ node.description|safe }}
+        </p>
+    </div>
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a href="#">Library</a></li>
+        <li class="breadcrumb-item active">Data</li>
+    </ol>
+
+    <div class="row">
+        {% for child in children.all %}
+        <div class="col-4">
+            <div class="card bg-light mb-2">
+                <a href="{% url 'market_group_view' child.id %}">
+                    <div class="card-header">
+                        <strong>{{ child.name }}</strong>
+                    </div>
+                </a>
+                <div class="card-body">
+                    {{ child.description }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

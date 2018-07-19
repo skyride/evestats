@@ -75,7 +75,7 @@ class SystemJump(models.Model):
 # Types
 class MarketGroup(models.Model):
     id = models.IntegerField(primary_key=True)
-    parent = models.ForeignKey('self', null=True, default=None, db_constraint=False, on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', null=True, related_name="children", default=None, db_constraint=False, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     description = models.TextField(null=True)
     icon_id = models.IntegerField(null=True)
@@ -83,6 +83,9 @@ class MarketGroup(models.Model):
 
     def __str__(self):
         return "%s:%s" % (self.id, self.name)
+
+    class Meta:
+        ordering = ('name', )
 
 
 class Category(models.Model):
