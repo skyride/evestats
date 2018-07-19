@@ -28,12 +28,11 @@ class MarketGroupView(View):
 
 
     def _generate_breadcrumb_trail(self, marketgroup):
-        if isinstance(marketgroup, dict):
-            return None
-
         def recurse(node):
             """Return an list containing the path to this trail"""
-            if node.parent is None:
+            if isinstance(node, dict):
+                return []
+            elif node.parent is None:
                 return [node]
             else:
                 return [*recurse(node.parent), node]

@@ -10,7 +10,8 @@
         </p>
     </div>
 
-    <ol class="breadcrumb">
+
+    <ol id="group-path" class="breadcrumb">
         {% for breadcrumb in breadcrumbs %}
             {% if forloop.last %}
                 <li class="breadcrumb-item active">{{ breadcrumb.name }}</li>
@@ -24,6 +25,21 @@
         {% endfor %}
     </ol>
 
+    {% with sisters=node.parent.children.all %}
+        {% if sisters.count > 1 and breadcrumbs|length > 2 %}
+            <ol id="sister-groups" class="breadcrumb">
+                {% for sister in sisters %}
+                    {% if sister == node %}
+                    <li class="breadcrumb-item active">{{ sister.name }}</li>
+                    {% else %}
+                    <li class="breadcrumb-item"><a href="{% url 'market_group_view' sister.id %}">{{ sister.name }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        {% endif %}
+    {% endwith %}
+
+
     <div class="row">
         {% for child in children.all %}
         <div class="col-4">
@@ -33,9 +49,11 @@
                         <strong>{{ child.name }}</strong>
                     </div>
                 </a>
-                <div class="card-body">
-                    {{ child.description }}
-                </div>
+                {% if child.description %}
+                    <div class="card-body">
+                        {{ child.description }}
+                    </div>
+                {% endif %}
             </div>
         </div>
         {% endfor %}
