@@ -83,7 +83,7 @@ class Icon(models.Model):
 
     @property
     def path(self):
-        return path_pattern.sub("", self.icon_file).lower()
+        return "https://img.skyride.org/eve/icons/items/%s" % path_pattern.sub("", self.icon_file).lower()
 
 
 # Types
@@ -140,6 +140,13 @@ class Type(models.Model):
 
     buy = models.DecimalField(max_digits=16, decimal_places=2, default=0)
     sell = models.DecimalField(max_digits=16, decimal_places=2, default=0)
+
+    @property
+    def icon_url(self):
+        if self.icon is None:
+            return "https://imageserver.eveonline.com/Type/%s_64.png" % self.id
+        else:
+            return path_pattern.sub("", self.icon.icon_file).lower()
 
     def __str__(self):
         return "%s:%s" % (self.id, self.name)
@@ -243,3 +250,18 @@ class Station(models.Model):
                 )
                 station.save()
                 return station
+
+
+# Skins
+class Skin(models.Model):
+    """A skin e.g. Sansha Victory, IGC"""
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(null=True, max_length=128, db_index=True)
+    material_id = models.IntegerField(null=True)
+
+
+class SkinLicense(models.Model):
+    """A skin license that maps typeIDs to skins"""
+    type = models.OneToOneField(Type, related_name="licenses", null=True, on_delete=models.CASCADE)
+    duration = models.IntegerField(null=True)
+    skin = models.ForeignKey(Skin, related_name="licenses", null=True, on_delete=models.CASCADE)

@@ -26,3 +26,5 @@ class Command(BaseCommand):
             updater.update_model(System, "mapSolarSystems")
             updater.update_model(SystemJump, "mapSolarSystemJumps", no_key=True)
             updater.update_model(Station, "staStations")
+            updater.update_model(Skin, "skins")
+            updater.update_model(SkinLicense, "skinLicense")

@@ -134,3 +134,17 @@ Station = [
     ('y', 'y'),
     ('z', 'z'),
 ]
+
+
+Skin = [
+    ('id', 'skinID'),
+    ('name', 'internalName'),
+    ('material_id', 'skinMaterialID')
+]
+
+
+SkinLicense = [
+    ('type_id', 'licenseTypeID'),
+    ('skin_id', 'skinID'),
+    ('duration', 'duration')
+]
