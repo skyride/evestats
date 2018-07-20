@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import re
+
 from django.db import models
 
 from math import pow, sqrt
@@ -72,13 +74,25 @@ class SystemJump(models.Model):
     destination = models.ForeignKey(System, related_name="jumps_destination", on_delete=models.CASCADE)
 
 
+# Icons
+path_pattern = re.compile("res:/ui/texture/icons/", re.IGNORECASE)
+class Icon(models.Model):
+    id = models.IntegerField(primary_key=True)
+    icon_file = models.TextField()
+    description = models.TextField()
+
+    @property
+    def path(self):
+        return path_pattern.sub("", self.icon_file).lower()
+
+
 # Types
 class MarketGroup(models.Model):
     id = models.IntegerField(primary_key=True)
     parent = models.ForeignKey('self', null=True, related_name="children", default=None, db_constraint=False, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     description = models.TextField(null=True)
-    icon_id = models.IntegerField(null=True)
+    icon = models.ForeignKey(Icon, related_name="market_groups", null=True, on_delete=models.SET_NULL)
     has_types = models.BooleanField()
 
     def __str__(self):
@@ -122,7 +136,7 @@ class Type(models.Model):
     capacity = models.FloatField(null=True)
     published = models.BooleanField()
     market_group = models.ForeignKey(MarketGroup, related_name="types", null=True, on_delete=models.CASCADE)
-    icon_id = models.IntegerField(null=True)
+    icon = models.ForeignKey(Icon, related_name="types", null=True, on_delete=models.SET_NULL)
 
     buy = models.DecimalField(max_digits=16, decimal_places=2, default=0)
     sell = models.DecimalField(max_digits=16, decimal_places=2, default=0)

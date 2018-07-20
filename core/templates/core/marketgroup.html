@@ -53,7 +53,18 @@
                     </a>
                     {% if child.description %}
                         <div class="card-body">
-                            {{ child.description }}
+                            <div class="row">
+                                <div class="col-md-3">
+                                    {% if child.icon %}
+                                    <a href="{% url 'market_group_view' child.id %}">
+                                        <img width="64" height="64" src="https://img.skyride.org/eve/icons/items/{{ child.icon.path }}">
+                                    </a>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-9">
+                                    {{ child.description }}
+                                </div>
+                            </div>
                         </div>
                     {% endif %}
                 </div>

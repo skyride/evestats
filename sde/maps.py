@@ -45,6 +45,11 @@ SystemJump = [
     ("destination_id", "toSolarSystemID")
 ]
 
+Icon = [
+    ("id", "iconID"),
+    ("icon_file", "iconFile"),
+    ("description", "description")
+]
 
 MarketGroup = [
     ('id', 'marketGroupID'),
