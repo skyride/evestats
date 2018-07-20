@@ -78,7 +78,7 @@
             {% for type in types.all %}
                 <div class="col-12">
                     <div class="card bg-light mb-0">
-                        {% if type.description %}
+                        {% if type.description or type.icon %}
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-lg-1 col-md-2 col-sm-2">

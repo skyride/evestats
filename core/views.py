@@ -1,3 +1,4 @@
+from django.db.models import Count, Q
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views import View
@@ -14,11 +15,22 @@ class MarketGroupView(View):
                 "description": "Browse through the market groups below",
 
             }
-            children = MarketGroup.objects.filter(parent__isnull=True)
+            children = MarketGroup.objects.annotate(
+                    children_count=Count('children'),
+                    types_count=Count('types')
+                ).filter(
+                    Q(children_count__gt=0) | Q(types_count__gt=0),
+                    parent__isnull=True
+                )
             types = []
         else:
             marketgroup = MarketGroup.objects.get(id=marketgroup_id)
-            children = marketgroup.children
+            children = marketgroup.children.annotate(
+                    children_count=Count('children'),
+                    types_count=Count('types')
+                ).filter(
+                    Q(children_count__gt=0) | Q(types_count__gt=0)
+                )
             types = marketgroup.types.prefetch_related("icon").order_by('name')
 
         context = {
