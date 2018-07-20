@@ -1,5 +1,7 @@
 {% extends "core/base.html" %}
 
+{% block title %}{{ node.name }}{% endblock %}
+
 {% block body %}
     <div class="jumbotron">
         <h1 class="display-3">{{ node.name }}</h1>
