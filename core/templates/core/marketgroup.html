@@ -4,16 +4,6 @@
 {% block title %}{{ node.name }}{% endblock %}
 
 {% block body %}
-    <div class="jumbotron">
-        <h1 class="display-3">{{ node.name }}</h1>
-        <p class="lead">
-            {% if node.description %}
-            {{ node.description|safe }}
-            {% endif %}
-        </p>
-    </div>
-
-
     <ol id="group-path" class="breadcrumb">
         {% for breadcrumb in breadcrumbs %}
             {% if forloop.last %}
@@ -44,6 +34,16 @@
     {% endwith %}
 
 
+    <div class="jumbotron">
+        <h1 class="display-3">{{ node.name }}</h1>
+        <p class="lead">
+            {% if node.description %}
+            {{ node.description|safe }}
+            {% endif %}
+        </p>
+    </div>
+
+
     {% if children.count > 0 %}
         <div class="row">
             {% for child in children.all %}
@@ -59,9 +59,9 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     {% if child.icon %}
-                                    <a href="{% url 'market_group_view' child.id %}">
-                                        <img width="64" height="64" src="{{ child.icon.path }}">
-                                    </a>
+                                        <a href="{% url 'market_group_view' child.id %}">
+                                            <img width="64" height="64" src="{{ child.icon.path }}">
+                                        </a>
                                     {% endif %}
                                 </div>
                                 <div class="col-md-9">
@@ -84,13 +84,12 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-lg-1 col-md-2 col-sm-2">
-                                        <a href="{% url 'market_group_view' type.id %}">
+                                        <a href="{% url 'type_view' type.id %}">
                                             <img src="{{ type.icon_url }}">
-                                            <!--<img width="64" height="64" src="https://img.skyride.org/eve/icons/items/{{ type.icon_path }}">-->
                                         </a>
                                     </div>
                                     <div class="col-lg-11 col-md-10 col-sm-10">
-                                        <a href="{% url 'market_group_view' type.id %}"><div>
+                                        <a href="{% url 'type_view' type.id %}"><div>
                                                 <strong>{{ type.name }}</strong>
                                                 <span class="float-right text-muted"><i>{{ type.sell|intcomma }} ISK</i></span>
                                         </div></a>

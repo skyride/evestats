@@ -164,7 +164,7 @@ class AttributeType(models.Model):
     category = models.ForeignKey(AttributeCategory, null=True, db_constraint=False, related_name="types", on_delete=models.CASCADE)
 
     description = models.CharField(max_length=1000, null=True)
-    icon_id = models.IntegerField(null=True)
+    icon = models.ForeignKey(Icon, null=True, on_delete=models.CASCADE)
     default_value = models.IntegerField(null=True)
     published = models.BooleanField(db_index=True)
     display_name = models.CharField(max_length=150, null=True)

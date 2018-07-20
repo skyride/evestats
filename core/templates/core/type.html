@@ -1,0 +1,69 @@
+{% extends "core/base.html" %}
+{% load humanize %}
+
+{% block title %}{{ node.name }}{% endblock %}
+
+{% block body %}
+    <ol id="group-path" class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+            {% if forloop.last %}
+                <li class="breadcrumb-item active">{{ breadcrumb.name }}</li>
+            {% else %}
+                {% if breadcrumb.root %}
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">{{ breadcrumb.name }}</a></li>
+                {% else %}
+                    <li class="breadcrumb-item"><a href="{% url 'market_group_view' breadcrumb.id %}">{{ breadcrumb.name }}</a></li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </ol>
+
+    <div class="jumbotron">
+        <h1 class="display-4">
+            <img src="{{ type.icon_url }}">
+            {{ type.name }}
+        </h1>
+        {% if type.description %}
+            <p class="lead">
+                {{ type.description|safe }}
+            </p>
+        {% endif %}
+
+        <p class="float-right">
+            <span class="text-muted">
+                Sell: {{ type.sell|intcomma }} ISK / Buy: {{ type.buy|intcomma }} ISK
+            </span>
+        </p>
+    </div>
+
+    <div class="row">
+        {% for category in categories %}
+            <div class="col-6">
+                <div class="card bg-light mb-2">
+                    <div class="card-header">
+                        <strong>{{ category.name }} {{ category.icon }}</strong>
+                    </div>
+
+                    <table class="table table-sm">
+                        {% for attribute_type in category.types.all %}
+                            {% if attribute_type.types %}
+                                <tr>
+                                    <td style="">
+                                        {% if attribute_type.icon %}
+                                            <img width="32" src="{{ attribute_type.icon.path }}">
+                                        {% endif %}
+                                        {% if attribute_type.display_name %}
+                                            {{ attribute_type.display_name }}
+                                        {% else %}
+                                            {{ attribute_type.name }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

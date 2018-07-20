@@ -19,5 +19,6 @@ from core import views
 
 urlpatterns = [
     path("", views.MarketGroupView.as_view(), name="index"),
-    path("group/<int:marketgroup_id>", views.MarketGroupView.as_view(), name="market_group_view")
+    path("group/<int:marketgroup_id>", views.MarketGroupView.as_view(), name="market_group_view"),
+    path("type/<int:type_id>", views.TypeView.as_view(), name="type_view")
 ]

@@ -1,9 +1,13 @@
+import itertools
+
 from django.db.models import Count, Q
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views import View
 
-from sde.models import MarketGroup
+from sde.models import MarketGroup, Type, AttributeCategory
+
+from core.helpers import generate_breadcrumb_trail
 
 
 class MarketGroupView(View):
@@ -41,27 +45,27 @@ class MarketGroupView(View):
 
         context = {
             "node": marketgroup,
-            "breadcrumbs": self._generate_breadcrumb_trail(marketgroup),
+            "breadcrumbs": generate_breadcrumb_trail(marketgroup),
             "children": children,
             "types": types
         }
         return render(request, "core/marketgroup.html", context)
 
 
-    def _generate_breadcrumb_trail(self, marketgroup):
-        def recurse(node):
-            """Return an list containing the path to this trail"""
-            if isinstance(node, dict):
-                return []
-            elif node.parent is None:
-                return [node]
-            else:
-                return [*recurse(node.parent), node]
 
-        return [
-            {
-                "name": "Market",
-                "root": True
-            },
-            *recurse(marketgroup)
-        ]
+class TypeView(View):
+    """Provides detailed information on a single type"""
+    def get(self, request, type_id):
+
+        type = Type.objects.get(id=type_id)
+
+        categories = AttributeCategory.objects.filter(
+            types__types__type_id=type_id    
+        ).distinct()
+
+        context = {
+            "type": type,
+            "breadcrumbs": generate_breadcrumb_trail(type),
+            "categories": categories
+        }
+        return render(request, "core/type.html", context)
