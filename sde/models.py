@@ -143,10 +143,10 @@ class Type(models.Model):
 
     @property
     def icon_url(self):
-        if self.icon is None:
-            return "https://imageserver.eveonline.com/Type/%s_64.png" % self.id
+        if self.skin_license.count() > 0:
+            return "https://img.skyride.org/eve/icons/ui/skinicons/%s.png" % self.skin_license.first().skin.material_id
         else:
-            return path_pattern.sub("", self.icon.icon_file).lower()
+            return "https://imageserver.eveonline.com/Type/%s_64.png" % self.id
 
     def __str__(self):
         return "%s:%s" % (self.id, self.name)
@@ -257,11 +257,11 @@ class Skin(models.Model):
     """A skin e.g. Sansha Victory, IGC"""
     id = models.IntegerField(primary_key=True)
     name = models.CharField(null=True, max_length=128, db_index=True)
-    material_id = models.IntegerField(null=True)
+    material_id = models.IntegerField(null=True, db_index=True)
 
 
 class SkinLicense(models.Model):
     """A skin license that maps typeIDs to skins"""
-    type = models.OneToOneField(Type, related_name="licenses", null=True, on_delete=models.CASCADE)
+    type = models.ForeignKey(Type, related_name="skin_license", null=True, on_delete=models.CASCADE)
     duration = models.IntegerField(null=True)
     skin = models.ForeignKey(Skin, related_name="licenses", null=True, on_delete=models.CASCADE)

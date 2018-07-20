@@ -31,7 +31,7 @@ class MarketGroupView(View):
                 ).filter(
                     Q(children_count__gt=0) | Q(types_count__gt=0)
                 )
-            types = marketgroup.types.prefetch_related("icon").order_by('name')
+            types = marketgroup.types.prefetch_related("icon", "skin_license", "skin_license__skin").order_by('name')
 
         context = {
             "node": marketgroup,
