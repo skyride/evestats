@@ -98,6 +98,17 @@ class Unit(models.Model):
     def affix(self, value):
         if value is None:
             return value
+        elif self.id == 108:
+            return "%s%%" % round(((1 - value) * 100))
+        elif self.id == 109:
+            out = (value - 1) * 100
+            out = '{0:.2f}'.format(out)
+            if value >= 1.0:
+                return ("+%s%%" % out).replace("0%", "%").replace(".0%", "%")
+            else:
+                return ("%s%%" % out).replace("0%", "%").replace(".0%", "%")
+        elif self.id == 111:
+            return '{0:.1f}%'.format((1 - value) * 100)
         elif self.id == 116:
             return Type.objects.get(id=value).name
         elif self.display_name is None:
