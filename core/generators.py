@@ -1,4 +1,5 @@
 import itertools
+from collections import OrderedDict
 
 from sde.models import AttributeCategory, AttributeType, TypeAttribute
 
@@ -22,15 +23,81 @@ class TypeViewGenerator(object):
         for category in self._categories:
             if category.name == "NULL":
                 del categories[category]
-            #elif category.name in ["Shield", "Armor", "Structure"]:
-            #    del categories[category]
+            elif category.name in ["Shield", "Armor", "Structure", "Fitting", "Drones", "Required Skills"]:
+                del categories[category]
 
         return categories
 
 
-    def defense(self):
-        """Returns info for defense panel"""
-        
+    def fitting(self):
+        for category, attributes in self._categories.items():
+            if category.name == "Fitting":
+                return attributes
+
+    def drones(self):
+        for category, attributes in self._categories.items():
+            if category.name == "Drones":
+                return attributes
+
+
+    def shield(self):
+        attributes = self.__get_attribute_dict([
+            "shieldEmDamageResonance",
+            "shieldThermalDamageResonance",
+            "shieldKineticDamageResonance",
+            "shieldExplosiveDamageResonance",
+            "shieldCapacity"
+        ])
+        if len(attributes) < 5:
+            return None
+
+        return {
+            "em": attributes["shieldEmDamageResonance"],
+            "thermal": attributes["shieldThermalDamageResonance"],
+            "kinetic": attributes["shieldKineticDamageResonance"],
+            "explosive": attributes["shieldExplosiveDamageResonance"],
+            "hp": attributes["shieldCapacity"]
+        }
+
+
+    def armor(self):
+        attributes = self.__get_attribute_dict([
+            "armorEmDamageResonance",
+            "armorThermalDamageResonance",
+            "armorKineticDamageResonance",
+            "armorExplosiveDamageResonance",
+            "armorHP"
+        ])
+        if len(attributes) < 5:
+            return None
+
+        return {
+            "em": attributes["armorEmDamageResonance"],
+            "thermal": attributes["armorThermalDamageResonance"],
+            "kinetic": attributes["armorKineticDamageResonance"],
+            "explosive": attributes["armorExplosiveDamageResonance"],
+            "hp": attributes["armorHP"]
+        }
+
+    
+    def structure(self):
+        attributes = self.__get_attribute_dict([
+            "emDamageResonance",
+            "thermalDamageResonance",
+            "kineticDamageResonance",
+            "explosiveDamageResonance",
+            "hp"
+        ])
+        if len(attributes) < 5:
+            return None
+
+        return {
+            "em": attributes["emDamageResonance"],
+            "thermal": attributes["thermalDamageResonance"],
+            "kinetic": attributes["kineticDamageResonance"],
+            "explosive": attributes["explosiveDamageResonance"],
+            "hp": attributes["hp"]
+        }
 
 
     def __categories(self):
@@ -61,7 +128,7 @@ class TypeViewGenerator(object):
 
     def __type_attributes(self):
         type_attributes = TypeAttribute.objects.filter(
-            type=self.type,
+            type_id=self.type.id,
             attribute__published=True
         ).exclude(
             attribute__category__name="NULL"
@@ -72,3 +139,13 @@ class TypeViewGenerator(object):
         ).all()
 
         return type_attributes
+
+
+    def __get_attribute_dict(self, attribute_names):
+        attributes = TypeAttribute.objects.filter(
+            type_id=self.type.id,
+            attribute__name__in=attribute_names
+        ).prefetch_related(
+            'attribute'
+        ).all()
+        return {attribute.attribute.name: attribute for attribute in attributes}

@@ -1,0 +1,58 @@
+{% load evestats %}
+<tr>
+    <td>{{ layer_name }}</td>
+
+    <td style="width: 18%;">
+        <div style="position: relative;">
+            <div class="progress" style="height: 24px;">
+                <div class="progress-bar bg-info" role="progressbar" style="width: {{ layer.em.value|invert }}%;"></div>
+            </div>
+            <div style="position: absolute; top: 0; right: 4px;">
+                <div align="center">
+                    <img width="24" src="{{ layer.em.attribute.icon.path }}"> {{ layer.em.display_value }}
+                </div>
+            </div>
+        </div>
+    </td>
+
+    <td style="width: 18%;">
+        <div style="position: relative;">
+            <div class="progress" style="height: 24px;">
+                <div class="progress-bar bg-danger" role="progressbar" style="width: {{ layer.thermal.value|invert }}%;"></div>
+            </div>
+            <div style="position: absolute; top: 0; right: 4px;">
+                <div align="center">
+                    <img width="24" src="{{ layer.thermal.attribute.icon.path }}"> {{ layer.thermal.display_value }}
+                </div>
+            </div>
+        </div>
+    </td>
+
+    <td style="width: 18%;">
+        <div style="position: relative;">
+            <div class="progress" style="height: 24px;">
+                <div class="progress-bar" role="progressbar" style="width: {{ layer.kinetic.value|invert }}%; background-color: #555555;"></div>
+            </div>
+            <div style="position: absolute; top: 0; right: 4px;">
+                <div align="center">
+                    <img width="24" src="{{ layer.kinetic.attribute.icon.path }}"> {{ layer.kinetic.display_value }}
+                </div>
+            </div>
+        </div>
+    </td>
+        
+    <td style="width: 18%;">
+        <div style="position: relative;">
+            <div class="progress" style="height: 24px;">
+                <div class="progress-bar bg-warning" role="progressbar" style="width: {{ layer.explosive.value|invert }}%;"></div>
+            </div>
+            <div style="position: absolute; top: 0; right: 4px;">
+                <div align="center">
+                    <img width="24" src="{{ layer.explosive.attribute.icon.path }}"> {{ layer.explosive.display_value }}
+                </div>
+            </div>
+        </div>
+    </td>
+
+    <td>{{ layer.hp.display_value }}</td>
+</tr>

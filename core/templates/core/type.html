@@ -41,30 +41,39 @@
 <div class="row">
     {{ gen.categories.0 }}
 
-    {% for category, attributes in gen.categories.items %}
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12">
+    <!-- Special-->
+    {% if gen.fitting %}
+        {% include "core/_attribute_panel.html" with name="Fitting" attributes=gen.fitting %}
+    {% endif %}
+
+    {% if gen.shield or gen.armor or gen.structure %}
+        <div class="col-xl-6">
             <div class="card bg-light mb-2">
                 <div class="card-header">
-                    <strong>{{ category.name }}</strong>
+                    <strong>Defense</strong>
                 </div>
 
-                <table>
-                    {% for attribute_type, type_attribute in attributes.items %}
-                    <tr>
-                        <td style="width: 42px">
-                            {% if attribute_type.icon %}
-                                <img width="32" src="{{ attribute_type.icon.path }}">
-                            {% else %}
-                                <div style="width: 32px; height: 32px;"></div>
-                            {% endif %}
-                        </td>
-                        <td>{{ attribute_type.display_name }}</td>
-                        <td>{{ type_attribute.display_value }}</td>
-                    </tr>
-                    {% endfor %}
+                <table class="table table-sm">
+                    {% if gen.shield %}
+                        {% include "core/_defense_layer.html" with layer_name="Shield" layer=gen.shield %}
+                    {% endif %}
+                    {% if gen.armor %}
+                        {% include "core/_defense_layer.html" with layer_name="Armor" layer=gen.armor %}
+                    {% endif %}
+                    {% if gen.structure %}
+                        {% include "core/_defense_layer.html" with layer_name="Structure" layer=gen.structure %}
+                    {% endif %}
                 </table>
             </div>
         </div>
+    {% endif %}
+
+    {% if gen.fitting %}
+        {% include "core/_attribute_panel.html" with name="Drones" attributes=gen.drones %}
+    {% endif %}
+
+    {% for category, attributes in gen.categories.items %}
+        {% include "core/_attribute_panel.html" with name=category.name %}
     {% endfor %}
 </div>
 {% endblock %}

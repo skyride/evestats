@@ -1,0 +1,23 @@
+<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12">
+    <div class="card bg-light mb-2">
+        <div class="card-header">
+            <strong>{{ name }}</strong>
+        </div>
+
+        <table>
+            {% for attribute_type, type_attribute in attributes.items %}
+            <tr>
+                <td style="width: 42px">
+                    {% if attribute_type.icon %}
+                        <img width="32" src="{{ attribute_type.icon.path }}">
+                    {% else %}
+                        <div style="width: 32px; height: 32px;"></div>
+                    {% endif %}
+                </td>
+                <td>{{ attribute_type.name }}</td>
+                <td>{{ type_attribute.display_value }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
