@@ -1,7 +1,7 @@
 {% extends "core/base.html" %}
 {% load humanize %}
 
-{% block title %}{{ node.name }}{% endblock %}
+{% block title %}{{ gen.type.name }}{% endblock %}
 
 {% block body %}
     <ol id="group-path" class="breadcrumb">
@@ -20,50 +20,51 @@
 
     <div class="jumbotron">
         <h1 class="display-4">
-            <img src="{{ type.icon_url }}">
-            {{ type.name }}
+            <img src="{{ gen.type.icon_url }}">
+            {{ gen.type.name }}
         </h1>
-        {% if type.description %}
+        {% if gen.type.description %}
             <p class="lead">
-                {{ type.description|safe }}
+                {{ gen.type.description|safe }}
             </p>
         {% endif %}
 
         <p class="float-right">
             <span class="text-muted">
-                Sell: {{ type.sell|intcomma }} ISK / Buy: {{ type.buy|intcomma }} ISK
+                Sell: {{ gen.type.sell|intcomma }} ISK / Buy: {{ gen.type.buy|intcomma }} ISK
             </span>
         </p>
     </div>
+{% endblock %}
 
-    <div class="row">
-        {% for category in categories %}
-            <div class="col-6">
-                <div class="card bg-light mb-2">
-                    <div class="card-header">
-                        <strong>{{ category.name }} {{ category.icon }}</strong>
-                    </div>
+{% block container-fluid %}
+<div class="row">
+    {{ gen.categories.0 }}
 
-                    <table class="table table-sm">
-                        {% for attribute_type in category.types.all %}
-                            {% if attribute_type.types %}
-                                <tr>
-                                    <td style="">
-                                        {% if attribute_type.icon %}
-                                            <img width="32" src="{{ attribute_type.icon.path }}">
-                                        {% endif %}
-                                        {% if attribute_type.display_name %}
-                                            {{ attribute_type.display_name }}
-                                        {% else %}
-                                            {{ attribute_type.name }}
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                    </table>
+    {% for category, attributes in gen.categories.items %}
+        <div class="col-4">
+            <div class="card bg-light mb-2">
+                <div class="card-header">
+                    <strong>{{ category.name }}</strong>
                 </div>
+
+                <table>
+                    {% for attribute_type, type_attribute in attributes.items %}
+                    <tr>
+                        <td style="width: 42px">
+                            {% if attribute_type.icon %}
+                                <img width="32" src="{{ attribute_type.icon.path }}">
+                            {% else %}
+                                <div style="width: 32px; height: 32px;"></div>
+                            {% endif %}
+                        </td>
+                        <td>{{ attribute_type.display_name }}</td>
+                        <td>{{ type_attribute.display_value }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
             </div>
-        {% endfor %}
-    </div>
+        </div>
+    {% endfor %}
+</div>
 {% endblock %}

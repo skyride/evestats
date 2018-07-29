@@ -86,6 +86,33 @@ class Icon(models.Model):
         return "https://img.skyride.org/eve/icons/items/%s" % path_pattern.sub("", self.icon_file).lower()
 
 
+# Units
+unit_pattern = re.compile("([0-9]+)=(\w+)")
+class Unit(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=96)
+    display_name = models.CharField(max_length=128, null=True)
+    description = models.TextField(null=True)
+
+    # Stick this unit on the end of a value
+    def affix(self, value):
+        if value is None:
+            return value
+        elif self.id == 116:
+            return Type.objects.get(id=value).name
+        elif self.display_name is None:
+            return str(value)
+        elif unit_pattern.search(self.display_name):
+            matches = unit_pattern.findall(self.display_name)
+            enum = {key: value for key, value in matches}
+            if str(int(value)) in enum:
+                return enum[str(int(value))]
+            else:
+                return "Invalid Enum: %s" % value
+        else:
+            return "%s %s" % (value, self.display_name)
+
+
 # Types
 class MarketGroup(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -168,7 +195,7 @@ class AttributeType(models.Model):
     default_value = models.IntegerField(null=True)
     published = models.BooleanField(db_index=True)
     display_name = models.CharField(max_length=150, null=True)
-    unit_id = models.IntegerField(null=True)
+    unit = models.ForeignKey(Unit, null=True, on_delete=models.SET_NULL)
     stackable = models.BooleanField()
     high_is_good = models.BooleanField()
 
@@ -179,18 +206,23 @@ class TypeAttribute(models.Model):
     value_int = models.IntegerField(null=True)
     value_float = models.FloatField(null=True)
 
-    @property
+    def __str__(self):
+        return "%s (%s)" % (
+            self.attribute.name,
+            self.value
+        )
+
     def value(self):
         if self.value_int != None:
             return self.value_int
         else:
             return self.value_float
 
-    def __str__(self):
-        return "%s (%s)" % (
-            self.attribute.name,
-            self.value
-        )
+    def display_value(self):
+        if self.attribute.unit is not None:
+            return self.attribute.unit.affix(self.value())
+        else:
+            return self.value()
 
 
 class Station(models.Model):

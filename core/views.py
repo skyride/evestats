@@ -5,9 +5,10 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views import View
 
-from sde.models import MarketGroup, Type, AttributeCategory
+from sde.models import MarketGroup, Type
 
 from core.helpers import generate_breadcrumb_trail
+from core.generators import TypeViewGenerator
 
 
 class MarketGroupView(View):
@@ -59,13 +60,8 @@ class TypeView(View):
 
         type = Type.objects.get(id=type_id)
 
-        categories = AttributeCategory.objects.filter(
-            types__types__type_id=type_id    
-        ).distinct()
-
         context = {
-            "type": type,
+            "gen": TypeViewGenerator(type),
             "breadcrumbs": generate_breadcrumb_trail(type),
-            "categories": categories
         }
         return render(request, "core/type.html", context)

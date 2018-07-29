@@ -51,6 +51,13 @@ Icon = [
     ("description", "description")
 ]
 
+Unit = [
+    ("id", "unitID"),
+    ("name", "unitName"),
+    ("display_name", "displayName"),
+    ("description", "description")
+]
+
 MarketGroup = [
     ('id', 'marketGroupID'),
     ('parent_id', 'parentGroupID'),
