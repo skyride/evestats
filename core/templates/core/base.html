@@ -1,15 +1,49 @@
 {% load static %}
+<!doctype html>
 <html lang="en">
     <head>
-        <link href="{% static 'core/css/pulse.min.css' %}" rel="stylesheet">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="{% static 'core/css/litera.min.css' %}" rel="stylesheet">
+        <link href="{% static 'core/css/style.css' %}" rel="stylesheet">
+
+        <script src="{% static 'core/js/jquery-3.3.1.min.js' %}" type="application/javascript"></script>
+        <script src="{% static 'core/js/bootstrap.bundle.js' %}" type="application/javascript"></script>
+        <script src="{% static 'core/js/typeahead.bundle.js' %}" type="application/javascript"></script>
+        <script src="{% static 'core/js/handlebars-v4.0.11.js' %}" type="application/javascript"></script>
 
         <title>{% block title %}{% endblock %}</title>
     </head>
 
     <body>
+        <!--<nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="{% url 'index' %}">EVE SDE Data</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        
+            <div class="collapse navbar-collapse" id="navbarColor03">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'index' %}">Market</a>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                </form>
+            </div>
+        </nav>
+        -->
+
         <main role="main">
             <div class="container">
                 <br />
+
+                <div class="form-group">
+                    <input type="text" class="form-control" id="search" placeholder="Search">
+                </div>
+
                 {% block body %}
                 {% endblock %}
             </div>
@@ -20,4 +54,30 @@
             </div>
         </main>
     </body>
+
+    <script type="application/javascript">
+        var types = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: '{% url "type_search" "_QUERY_" %}',
+                wildcard: '_QUERY_'
+            }
+        });
+
+        $('#search').typeahead(null, {
+            name: 'search',
+            source: types,
+            display: 'name',
+            minLength: 3,
+            limit: 20,
+            templates: {
+                suggestion: function(x) {
+                    console.log(x);
+                    html = '<a href="{% url "type_view" 1234567890 %}" class="bg-light border-medium"><img width="32" src="'+x.icon_url+'"> <span style="vertical-align: middle;">'+x.name+'</span><div class="float-right" style="margin-top: 3px;"><span class="text-muted">'+x.sell+'</span></div></a>';
+                    return html.replace("1234567890", x.id);
+                }
+            }
+        });
+    </script>
 </html>

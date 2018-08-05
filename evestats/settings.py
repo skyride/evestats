@@ -38,7 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
 
+    'django_elasticsearch_dsl',
+
     'sde',
+    'search',
     'core'
 ]
 
@@ -83,6 +86,12 @@ DATABASES = {
 	'HOST': os.environ.get("DB_HOST", "postgres"),
 	'USER': os.environ.get("DB_USER", "postgres"),
 	'PASSWORD': os.environ.get("DB_PASSWORD", "")
+    }
+}
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'elastic:9200'
     }
 }
 

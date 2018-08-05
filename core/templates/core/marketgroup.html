@@ -4,19 +4,21 @@
 {% block title %}{{ node.name }}{% endblock %}
 
 {% block body %}
-    <ol id="group-path" class="breadcrumb">
-        {% for breadcrumb in breadcrumbs %}
-            {% if forloop.last %}
-                <li class="breadcrumb-item active">{{ breadcrumb.name }}</li>
-            {% else %}
-                {% if breadcrumb.root %}
-                    <li class="breadcrumb-item"><a href="{% url 'index' %}">{{ breadcrumb.name }}</a></li>
+    {% if breadcrumbs|length > 1 %}
+        <ol id="group-path" class="breadcrumb">
+            {% for breadcrumb in breadcrumbs %}
+                {% if forloop.last %}
+                    <li class="breadcrumb-item active">{{ breadcrumb.name }}</li>
                 {% else %}
-                    <li class="breadcrumb-item"><a href="{% url 'market_group_view' breadcrumb.id %}">{{ breadcrumb.name }}</a></li>
+                    {% if breadcrumb.root %}
+                        <li class="breadcrumb-item"><a href="{% url 'index' %}">{{ breadcrumb.name }}</a></li>
+                    {% else %}
+                        <li class="breadcrumb-item"><a href="{% url 'market_group_view' breadcrumb.id %}">{{ breadcrumb.name }}</a></li>
+                    {% endif %}
                 {% endif %}
-            {% endif %}
-        {% endfor %}
-    </ol>
+            {% endfor %}
+        </ol>
+    {% endif %}
 
 
     {% with sisters=node.parent.children.all %}

@@ -1,0 +1,17 @@
+.twitter-typeahead {
+    width: 100%;
+}
+
+.tt-menu {
+    width: 100%;
+}
+
+.tt-suggestion {
+    display: block;
+    padding: 2px 12px;
+    border-radius: 4px;
+}
+
+a.tt-suggestion {
+    text-decoration: none;
+}

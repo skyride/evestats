@@ -15,10 +15,13 @@ Including another URLconf
 """
 from django.urls import path
 
-from core import views
+from core import views as core_views
+from search import views as search_views
 
 urlpatterns = [
-    path("", views.MarketGroupView.as_view(), name="index"),
-    path("group/<int:marketgroup_id>", views.MarketGroupView.as_view(), name="market_group_view"),
-    path("type/<int:type_id>", views.TypeView.as_view(), name="type_view")
+    path("", core_views.MarketGroupView.as_view(), name="index"),
+    path("group/<int:marketgroup_id>", core_views.MarketGroupView.as_view(), name="market_group_view"),
+    path("type/<int:type_id>", core_views.TypeView.as_view(), name="type_view"),
+    path("dumps/types.json", search_views.TypeDump.as_view(), name="type_dump"),
+    path("search/<str:search>", search_views.TypeSearch.as_view(), name="type_search"),
 ]
