@@ -1,10 +1,10 @@
-<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12">
+<div class="">
     <div class="card bg-light mb-2">
         <div class="card-header">
             <strong>{{ name }}</strong>
         </div>
 
-        <table>
+        <table style="width: 100%;">
             {% for attribute_type, type_attribute in attributes.items %}
             <tr>
                 <td style="width: 42px">
@@ -15,7 +15,7 @@
                     {% endif %}
                 </td>
                 <td>{{ attribute_type.display_name }}</td>
-                <td>{{ type_attribute.display_value }}</td>
+                <td style="width: 40%;">{{ type_attribute.display_value }}</td>
             </tr>
             {% endfor %}
         </table>

@@ -47,32 +47,30 @@
 
 
     {% if children.count > 0 %}
-        <div class="row">
+        <div class="card-columns">
             {% for child in children.all %}
-            <div class="col-4">
-                <div class="card bg-light mb-3">
-                    <a href="{% url 'market_group_view' child.id %}">
-                        <div class="card-header">
-                            <strong>{{ child.name }}</strong>
-                        </div>
-                    </a>
-                    {% if child.description %}
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    {% if child.icon %}
-                                        <a href="{% url 'market_group_view' child.id %}">
-                                            <img width="64" height="64" src="{{ child.icon.path }}">
-                                        </a>
-                                    {% endif %}
-                                </div>
-                                <div class="col-md-9">
-                                    {{ child.description }}
-                                </div>
+                <div class="card bg-light">
+                <a href="{% url 'market_group_view' child.id %}">
+                    <div class="card-header">
+                        <strong>{{ child.name }}</strong>
+                    </div>
+                </a>
+                {% if child.description %}
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                {% if child.icon %}
+                                    <a href="{% url 'market_group_view' child.id %}">
+                                        <img width="64" height="64" src="{{ child.icon.path }}">
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-9">
+                                {{ child.description }}
                             </div>
                         </div>
-                    {% endif %}
-                </div>
+                    </div>
+                {% endif %}
             </div>
             {% endfor %}
         </div>
