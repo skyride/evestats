@@ -2,15 +2,13 @@ version: '3'
 services:
   app:
     build: .
-    command: "./manage.py runserver 0:8000"
     volumes:
       - .:/app
+      - staticfiles:/static
     environment:
-      - DEBUG=1
+      - THREADS=4
     depends_on:
       - postgres
-    ports:
-      - "7070:8000"
       
   postgres:
     image: "postgres:alpine"
@@ -19,7 +17,17 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  nginx:
+    build: nginx/
+    volumes:
+      - staticfiles:/static
+    ports:
+      - "7070:8000"
+    depends_on:
+      - app
+
 
 volumes:
   pgdata:
   elasticdata:
+  staticfiles:

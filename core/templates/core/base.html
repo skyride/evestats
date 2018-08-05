@@ -1,12 +1,11 @@
 {% load static %}
-<!doctype html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <link href="{% static 'core/css/litera.min.css' %}" rel="stylesheet">
-        <link href="{% static 'core/css/style.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'core/css/litera.min.css' %}">
+        <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
 
         <script src="{% static 'core/js/jquery-3.3.1.min.js' %}" type="application/javascript"></script>
         <script src="{% static 'core/js/bootstrap.bundle.js' %}" type="application/javascript"></script>
@@ -73,7 +72,6 @@
             limit: 20,
             templates: {
                 suggestion: function(x) {
-                    console.log(x);
                     html = '<a href="{% url "type_view" 1234567890 %}" class="bg-light border-medium"><img width="32" src="'+x.icon_url+'"> <span style="vertical-align: middle;">'+x.name+'</span><div class="float-right" style="margin-top: 3px;"><span class="text-muted">'+x.sell+'</span></div></a>';
                     return html.replace("1234567890", x.id);
                 }
